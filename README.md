@@ -1,14 +1,13 @@
 # Placement Prediction & Career Guidance Portal
 
-A Django-based web application designed to help students evaluate their placement readiness and receive career guidance.
+A Django-based web application that helps students evaluate placement readiness and receive career guidance.
 
-## Features Implemented
+## Features
 
 * Student Registration
 * User Login & Logout
 * Dashboard
 * SQLite Database Integration
-* Django Authentication
 
 ## Tech Stack
 
@@ -25,7 +24,4 @@ A Django-based web application designed to help students evaluate their placemen
 * Career Recommendations
 * Analytics Dashboard
 
-## Project Status
-
-Currently under active development.
 
