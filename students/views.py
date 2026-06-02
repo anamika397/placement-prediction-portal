@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .forms import StudentRegistrationForm, StudentProfileForm
 from .models import Student
+from ml.predict import predict_placement
 
 def home(request):
 
@@ -79,6 +80,7 @@ def predict(request):
     students = Student.objects.all()
 
     if not students:
+
         return render(
             request,
             'prediction.html',
@@ -89,15 +91,16 @@ def predict(request):
 
     student = students.last()
 
-    score = (
-        (student.cgpa * 10)
-        + (student.aptitude * 0.25)
-        + (student.coding * 0.30)
-        + (student.communication * 0.20)
-        + (student.projects * 5)
+    prediction, probability = predict_placement(
+        student.cgpa,
+        student.aptitude,
+        student.coding,
+        student.communication,
+        student.projects
     )
 
-    if score >= 150:
+    if probability >= 80:
+
         category = "High Chance"
 
         roles = [
@@ -106,7 +109,8 @@ def predict(request):
             "Data Analyst"
         ]
 
-    elif score >= 120:
+    elif probability >= 60:
+
         category = "Moderate Chance"
 
         roles = [
@@ -116,18 +120,24 @@ def predict(request):
         ]
 
     else:
+
         category = "Low Chance"
 
         roles = [
-            "Skill Development Required",
-            "Practice DSA",
-            "Build More Projects"
+            "Improve Coding Skills",
+            "Build More Projects",
+            "Practice Aptitude"
         ]
 
     context = {
-        'score': round(score, 2),
+
+        'score': probability,
         'category': category,
         'roles': roles
     }
 
-    return render(request, 'prediction.html', context)
+    return render(
+        request,
+        'prediction.html',
+        context
+    )
