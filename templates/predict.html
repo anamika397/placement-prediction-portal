@@ -1,0 +1,281 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Placement Prediction</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark mb-4">
+
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="/dashboard/">
+            Placement Portal
+        </a>
+
+        <div>
+
+            <a href="/dashboard/" class="btn btn-outline-light">
+                Dashboard
+            </a>
+
+            <a href="/predict/" class="btn btn-outline-light">
+                Predict
+            </a>
+
+            <a href="/history/" class="btn btn-outline-light">
+                History
+            </a>
+
+            <a href="/analytics/" class="btn btn-outline-light">
+                Analytics
+            </a>
+
+            <a href="/logout/" class="btn btn-danger">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-center mb-4">
+            Placement Prediction Portal
+        </h2>
+
+        <div class="card mb-4 p-3 bg-light">
+
+            <h4 class="mb-3">
+                Student Profile Data
+            </h4>
+
+            <p><strong>Name:</strong> {{ student.name }}</p>
+
+            <p><strong>Branch:</strong> {{ student.branch }}</p>
+
+            <p><strong>Semester:</strong> {{ student.semester }}</p>
+
+            <p><strong>CGPA:</strong> {{ student.cgpa }}</p>
+
+            <p><strong>Aptitude:</strong> {{ student.aptitude }}</p>
+
+            <p><strong>Coding:</strong> {{ student.coding }}</p>
+
+            <p><strong>Communication:</strong> {{ student.communication }}</p>
+
+            <p><strong>Projects:</strong> {{ student.projects }}</p>
+
+        </div>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <button type="submit"
+                    class="btn btn-success w-100">
+
+                Predict Using Saved Profile
+
+            </button>
+
+        </form>
+
+        {% if result %}
+
+        <div class="mt-4">
+
+            {% if result == "Placed" %}
+
+            <div class="alert alert-success">
+
+                <h4>
+                    ✅ Prediction: {{ result }}
+                </h4>
+
+                <p>
+                    High chances of getting placed.
+                </p>
+
+            </div>
+
+            {% else %}
+
+            <div class="alert alert-danger">
+
+                <h4>
+                    ❌ Prediction: {{ result }}
+                </h4>
+
+                <p>
+                    Improve your skills and profile.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+            {% if readiness_score %}
+
+            <div class="card mt-3 p-3">
+
+                <h4>
+                    Placement Readiness Score:
+                    {{ readiness_score }}/100
+                </h4>
+
+                <div class="progress">
+
+                    <div class="progress-bar bg-success"
+                         role="progressbar"
+                         style="width: {{ readiness_score }}%;">
+
+                        {{ readiness_score }}%
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            {% if guidance %}
+
+            <div class="alert alert-info mt-3">
+
+                <h4>
+                    Career Guidance
+                </h4>
+
+                <ul>
+
+                    {% for item in guidance %}
+
+                    <li>{{ item }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+        <hr>
+
+        <div class="alert alert-info">
+
+            <h5>
+                Portal Statistics
+            </h5>
+
+            <p>
+                Total Predictions Made:
+                {{ history|length }}
+            </p>
+
+        </div>
+
+        <h2>
+            Prediction History
+        </h2>
+
+        <h5>
+            Total Predictions:
+            {{ history|length }}
+        </h5>
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Student</th>
+                    <th>CGPA</th>
+                    <th>Aptitude</th>
+                    <th>Coding</th>
+                    <th>Communication</th>
+                    <th>Projects</th>
+                    <th>Prediction</th>
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in history %}
+
+                <tr>
+
+                    <td>{{ item.student.name }}</td>
+                    <td>{{ item.cgpa }}</td>
+                    <td>{{ item.aptitude }}</td>
+                    <td>{{ item.coding }}</td>
+                    <td>{{ item.communication }}</td>
+                    <td>{{ item.projects }}</td>
+
+                    <td>
+
+                        {% if item.prediction == "Placed" %}
+
+                        <span class="badge bg-success">
+                            Placed
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">
+                            Not Placed
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>{{ item.created_at }}</td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="8" class="text-center">
+
+                        No Prediction History Found
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+```

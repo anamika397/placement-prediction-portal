@@ -1,6 +1,6 @@
 from django import forms
 from .models import Student
-
+from django import forms
 
 class StudentRegistrationForm(forms.ModelForm):
 
@@ -35,3 +35,15 @@ class StudentProfileForm(forms.ModelForm):
             'communication',
             'projects'
         ]
+
+class PredictionForm(forms.Form):
+
+    cgpa = forms.FloatField()
+
+    aptitude = forms.IntegerField()
+
+    coding = forms.IntegerField()
+
+    communication = forms.IntegerField()
+
+    projects = forms.IntegerField()
