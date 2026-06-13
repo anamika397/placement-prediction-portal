@@ -9,7 +9,7 @@ from .ml_utils import predict_placement
 from .models import PredictionHistory
 import csv
 from django.http import HttpResponse
-
+from reportlab.pdfgen import canvas
 
 
 
@@ -39,8 +39,8 @@ def login_view(request):
 
     if request.method == 'POST':
 
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         user = authenticate(
             request,
@@ -85,6 +85,7 @@ def dashboard(request):
     readiness_score = 0
     strengths = []
     weaknesses = []
+    placement_probability = 0
     if student:
 
         readiness_score = round(
@@ -95,6 +96,18 @@ def dashboard(request):
                 student.communication +
                 (student.projects * 5)
             ) / 4
+        )
+        placement_probability = min(
+            100,
+            round(
+                (
+                    (student.cgpa * 10) +
+                    student.aptitude +
+                    student.coding +
+                    student.communication +
+                    (student.projects * 5)
+                ) / 4
+            )
         )
     if student.coding >= 80:
      strengths.append("Coding")
@@ -124,6 +137,34 @@ def dashboard(request):
      strengths.append("Projects")
     else:
      weaknesses.append("Projects")
+    roadmap = []
+
+    if student:
+
+     if student.aptitude < 70:
+        roadmap.append(
+            "Practice Aptitude daily for 30 minutes"
+        )
+
+    if student.coding < 70:
+        roadmap.append(
+            "Solve DSA problems regularly"
+        )
+
+    if student.communication < 70:
+        roadmap.append(
+            "Improve communication and interview skills"
+        )
+
+    if student.projects < 3:
+        roadmap.append(
+            "Build more projects and upload them to GitHub"
+        )
+
+    if student.cgpa < 7:
+        roadmap.append(
+            "Focus on improving academic performance"
+        )
     context = {
 
     'student': student,
@@ -138,10 +179,11 @@ def dashboard(request):
         placement_rate,
         2
     ),
-
+    'roadmap': roadmap,
     'readiness_score': readiness_score,
 
     'strengths': strengths,
+'placement_probability': placement_probability,
 
     'weaknesses': weaknesses
 }
@@ -202,6 +244,7 @@ def predict(request):
     result_text = None
     guidance = None
     readiness_score = None
+    placement_probability = None
 
     if request.method == 'POST':
 
@@ -213,12 +256,17 @@ def predict(request):
 
         readiness_score = round(
             (
-                (cgpa * 10) +
-                aptitude +
-                coding +
-                communication +
-                (projects * 5)
+                (cgpa * 10)
+                + aptitude
+                + coding
+                + communication
+                + (projects * 5)
             ) / 4
+        )
+
+        placement_probability = min(
+            100,
+            readiness_score
         )
 
         result = predict_placement(
@@ -236,19 +284,29 @@ def predict(request):
             guidance = []
 
             if coding >= 80:
-                guidance.append("Backend Developer")
+                guidance.append(
+                    "Backend Developer"
+                )
 
             if aptitude >= 80:
-                guidance.append("Data Analyst")
+                guidance.append(
+                    "Data Analyst"
+                )
 
             if communication >= 80:
-                guidance.append("Business Analyst")
+                guidance.append(
+                    "Business Analyst"
+                )
 
             if cgpa >= 8:
-                guidance.append("Software Engineer")
+                guidance.append(
+                    "Software Engineer"
+                )
 
             if projects >= 5:
-                guidance.append("Full Stack Developer")
+                guidance.append(
+                    "Full Stack Developer"
+                )
 
             if not guidance:
                 guidance.append(
@@ -280,10 +338,10 @@ def predict(request):
         )
 
     history = PredictionHistory.objects.filter(
-    student=student
-).order_by(
-    '-created_at'
-)
+        student=student
+    ).order_by(
+        '-created_at'
+    )
 
     return render(
         request,
@@ -294,6 +352,7 @@ def predict(request):
             'history': history,
             'guidance': guidance,
             'readiness_score': readiness_score,
+            'placement_probability': placement_probability,
         }
     )
 def history(request):
@@ -331,11 +390,34 @@ def analytics(request):
     total_not_placed = PredictionHistory.objects.filter(
         prediction="Not Placed"
     ).count()
+    student = Student.objects.filter(
+    user=request.user
+    ).first()
 
+    top_skill = None
+
+    if student:
+
+     scores = {
+
+        'Aptitude': student.aptitude,
+
+        'Coding': student.coding,
+
+        'Communication': student.communication
+
+    }
+
+    top_skill = max(
+        scores,
+        key=scores.get
+    )
     recent_predictions = PredictionHistory.objects.order_by(
         '-created_at'
     )[:5]
+    placed_data = total_placed
 
+    not_placed_data = total_not_placed
     if total_predictions > 0:
         placement_rate = (
             total_placed / total_predictions
@@ -347,6 +429,9 @@ def analytics(request):
         request,
         'analytics.html',
         {
+            'placed_data': placed_data,
+            'not_placed_data': not_placed_data,
+            'top_skill': top_skill,
             'total_predictions': total_predictions,
             'total_placed': total_placed,
             'total_not_placed': total_not_placed,
@@ -411,5 +496,236 @@ def export_csv(request):
             item.prediction,
             item.created_at
         ])
+
+    return response
+def company_eligibility(request):
+
+    student = Student.objects.filter(
+        user=request.user
+    ).first()
+
+    eligible = []
+
+    not_eligible = []
+
+    recommended = []
+
+    if student:
+
+        # Eligibility Check
+
+        if student.cgpa >= 6:
+            eligible.append("TCS")
+        else:
+            not_eligible.append("TCS")
+
+        if student.cgpa >= 6.5:
+            eligible.append("Infosys")
+        else:
+            not_eligible.append("Infosys")
+
+        if student.cgpa >= 7:
+            eligible.append("Accenture")
+        else:
+            not_eligible.append("Accenture")
+
+        if student.cgpa >= 7.5:
+            eligible.append("Cognizant")
+        else:
+            not_eligible.append("Cognizant")
+
+        if student.cgpa >= 8 and student.coding >= 80:
+            eligible.append("Amazon")
+        else:
+            not_eligible.append("Amazon")
+
+        if student.cgpa >= 9 and student.coding >= 90:
+            eligible.append("Google")
+        else:
+            not_eligible.append("Google")
+
+        if student.cgpa >= 9 and student.coding >= 90:
+            eligible.append("Microsoft")
+        else:
+            not_eligible.append("Microsoft")
+
+        # Recommended Companies
+
+        if student.coding >= 90:
+            recommended.append("Google")
+
+        if student.coding >= 85:
+            recommended.append("Amazon")
+
+        if student.coding >= 75:
+            recommended.append("Microsoft")
+
+        if student.coding >= 70:
+            recommended.append("Accenture")
+
+        if student.coding >= 60:
+            recommended.append("TCS")
+
+    return render(
+        request,
+        'company_eligibility.html',
+        {
+            'student': student,
+            'eligible': eligible,
+            'not_eligible': not_eligible,
+            'recommended': recommended
+        }
+    )
+
+
+def download_report(request):
+
+    student = Student.objects.filter(
+        user=request.user
+    ).first()
+
+    response = HttpResponse(
+        content_type='application/pdf'
+    )
+
+    response[
+        'Content-Disposition'
+    ] = 'attachment; filename="placement_report.pdf"'
+
+    pdf = canvas.Canvas(response)
+
+    pdf.setTitle("Placement Report")
+
+    pdf.drawString(
+        100,
+        800,
+        "PLACEMENT PREDICTION REPORT"
+    )
+
+    pdf.drawString(
+        100,
+        760,
+        f"Name: {student.name}"
+    )
+
+    pdf.drawString(
+        100,
+        740,
+        f"Branch: {student.branch}"
+    )
+
+    pdf.drawString(
+        100,
+        720,
+        f"Semester: {student.semester}"
+    )
+
+    pdf.drawString(
+        100,
+        700,
+        f"CGPA: {student.cgpa}"
+    )
+
+    pdf.drawString(
+        100,
+        680,
+        f"Aptitude: {student.aptitude}"
+    )
+
+    pdf.drawString(
+        100,
+        660,
+        f"Coding: {student.coding}"
+    )
+
+    pdf.drawString(
+        100,
+        640,
+        f"Communication: {student.communication}"
+    )
+
+    pdf.drawString(
+        100,
+        620,
+        f"Projects: {student.projects}"
+    )
+
+    readiness_score = round(
+        (
+            (student.cgpa * 10)
+            + student.aptitude
+            + student.coding
+            + student.communication
+            + (student.projects * 5)
+        ) / 4
+    )
+
+    pdf.drawString(
+        100,
+        580,
+        f"Readiness Score: {readiness_score}%"
+    )
+
+    strengths = []
+
+    weaknesses = []
+
+    if student.coding >= 80:
+        strengths.append("Coding")
+    else:
+        weaknesses.append("Coding")
+
+    if student.aptitude >= 70:
+        strengths.append("Aptitude")
+    else:
+        weaknesses.append("Aptitude")
+
+    if student.communication >= 70:
+        strengths.append("Communication")
+    else:
+        weaknesses.append("Communication")
+
+    if student.cgpa >= 8:
+        strengths.append("Academic Performance")
+    else:
+        weaknesses.append("Academic Performance")
+
+    pdf.drawString(
+        100,
+        540,
+        "Strengths:"
+    )
+
+    y = 520
+
+    for item in strengths:
+
+        pdf.drawString(
+            120,
+            y,
+            f"- {item}"
+        )
+
+        y -= 20
+
+    pdf.drawString(
+        300,
+        540,
+        "Areas To Improve:"
+    )
+
+    y2 = 520
+
+    for item in weaknesses:
+
+        pdf.drawString(
+            320,
+            y2,
+            f"- {item}"
+        )
+
+        y2 -= 20
+
+    pdf.save()
 
     return response

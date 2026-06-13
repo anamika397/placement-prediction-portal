@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +5,27 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
+          <style>
+
+body{
+    background:#f5f7fb;
+}
+
+.card{
+    border:none;
+    border-radius:15px;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    transition:0.3s;
+}
+
+.profile-card{
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+</style>
 </head>
 
 <body class="bg-light">
@@ -50,33 +70,162 @@
 
     <div class="card shadow p-4">
 
-        <h2 class="text-center mb-4">
-            Placement Prediction Portal
-        </h2>
+        <div class="text-center mb-4 p-4 rounded"
+     style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;">
 
-        <div class="card mb-4 p-3 bg-light">
+    <h1>
+        Placement Prediction Portal 🚀
+    </h1>
 
-            <h4 class="mb-3">
-                Student Profile Data
-            </h4>
+    <p class="mb-0">
+        AI Powered Placement Readiness & Career Guidance
+    </p>
 
-            <p><strong>Name:</strong> {{ student.name }}</p>
+</div>
 
-            <p><strong>Branch:</strong> {{ student.branch }}</p>
+       <div class="card shadow p-4 mb-4">
 
-            <p><strong>Semester:</strong> {{ student.semester }}</p>
+    <h4 class="text-center mb-4">
+        Student Profile
+    </h4>
 
-            <p><strong>CGPA:</strong> {{ student.cgpa }}</p>
+    <div class="row text-center">
 
-            <p><strong>Aptitude:</strong> {{ student.aptitude }}</p>
+        <div class="col-md-3 mb-3">
 
-            <p><strong>Coding:</strong> {{ student.coding }}</p>
+            <div class="card profile-card p-3">
 
-            <p><strong>Communication:</strong> {{ student.communication }}</p>
+                <h6 class="text-muted">
+                    Name
+                </h6>
 
-            <p><strong>Projects:</strong> {{ student.projects }}</p>
+                <h5>
+                    {{ student.name }}
+                </h5>
+
+            </div>
 
         </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="card profile-card p-3">
+
+                <h6 class="text-muted">
+                    Branch
+                </h6>
+
+                <h5>
+                    {{ student.branch }}
+                </h5>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="card profile-card p-3">
+
+                <h6 class="text-muted">
+                    Semester
+                </h6>
+
+                <h5>
+                    {{ student.semester }}
+                </h5>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="card profile-card p-3">
+
+                <h6 class="text-muted">
+                    CGPA
+                </h6>
+
+                <h5>
+                    {{ student.cgpa }}
+                </h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row text-center mt-3">
+
+        <div class="col-md-3 mb-3">
+
+            <div class="card profile-card p-3">
+
+                <h6 class="text-muted">
+                    Aptitude
+                </h6>
+
+                <h5>
+                    {{ student.aptitude }}
+                </h5>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="card profile-card p-3">
+
+                <h6 class="text-muted">
+                    Coding
+                </h6>
+
+                <h5>
+                    {{ student.coding }}
+                </h5>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="card profile-card p-3">
+
+                <h6 class="text-muted">
+                    Communication
+                </h6>
+
+                <h5>
+                    {{ student.communication }}
+                </h5>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="card profile-card p-3">
+
+                <h6 class="text-muted">
+                    Projects
+                </h6>
+
+                <h5>
+                    {{ student.projects }}
+                </h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
         <form method="post">
 
@@ -125,30 +274,58 @@
 
             {% endif %}
 
-            {% if readiness_score %}
+           {% if readiness_score %}
 
-            <div class="card mt-3 p-3">
+<div class="card mt-3 p-3">
 
-                <h4>
-                    Placement Readiness Score:
-                    {{ readiness_score }}/100
-                </h4>
+    <h4>
+        Placement Readiness Score:
+        {{ readiness_score }}/100
+    </h4>
 
-                <div class="progress">
+    <div class="progress">
 
-                    <div class="progress-bar bg-success"
-                         role="progressbar"
-                         style="width: {{ readiness_score }}%;">
+        <div class="progress-bar bg-success"
+             role="progressbar"
+             style="width: {{ readiness_score }}%;">
 
-                        {{ readiness_score }}%
+            {{ readiness_score }}%
 
-                    </div>
+        </div>
 
-                </div>
+    </div>
 
-            </div>
+</div>
 
-            {% endif %}
+{% endif %}
+
+{% if placement_probability %}
+
+<div class="card mt-3 p-3 border-primary">
+
+    <h4 class="text-primary">
+        Placement Probability
+    </h4>
+
+    <h2>
+        {{ placement_probability }}%
+    </h2>
+
+    <div class="progress">
+
+        <div class="progress-bar bg-primary"
+             role="progressbar"
+             style="width: {{ placement_probability }}%;">
+
+            {{ placement_probability }}%
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
 
             {% if guidance %}
 
@@ -278,4 +455,3 @@
 
 </body>
 </html>
-```
