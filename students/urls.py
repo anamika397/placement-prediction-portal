@@ -10,6 +10,16 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
 
     path('dashboard/', views.dashboard, name='dashboard'),
+    path(
+    'company-eligibility/',
+    views.company_eligibility,
+    name='company_eligibility'
+),
+path(
+    'download-report/',
+    views.download_report,
+    name='download_report'
+),
     path('profile/', views.profile, name='profile'),
     path('predict/', views.predict, name='predict'),
     path('history/', views.history, name='history'),
