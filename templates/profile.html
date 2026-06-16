@@ -36,7 +36,14 @@ body{
 
 .form-control,
 .form-select{
-    border-radius:10px;
+    border-radius:12px;
+    padding:12px;
+    border:1px solid #dbe2ea;
+}
+
+.form-control:focus{
+    border-color:#4f46e5;
+    box-shadow:0 0 0 0.2rem rgba(79,70,229,0.15);
 }
 
 .save-btn{
@@ -44,7 +51,26 @@ body{
     padding:12px;
     font-weight:600;
 }
+.summary-card{
+    border:none;
+    border-radius:15px;
+    transition:0.3s;
+}
 
+.summary-card:hover{
+    transform:translateY(-5px);
+}
+.summary-card h3{
+    margin-top:8px;
+    font-weight:700;
+}
+.summary-card .card-body{
+    padding:15px;
+}
+
+.summary-card h3{
+    font-size:2rem;
+}
 </style>
 
 </head>
@@ -79,35 +105,196 @@ body{
 
         <div class="col-lg-8">
 
-            <div class="card shadow border-0">
+            <div class="profile-card">
 
-                <div class="card-header bg-primary text-white">
-
+                <div class="profile-header">
                     <h3 class="mb-0">
-
-                        Student Profile
-
-                    </h3>
-
+    <i class="bi bi-person-circle"></i>
+    Student Profile
+</h3>
+<p class="mb-0 mt-2">
+    Update your academic and skill information
+</p>
                 </div>
 
+<!-- ADD HERE -->
+
+<div class="row text-center p-4">
+
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card border-0 bg-success-subtle">
+
+           <div class="card-body">
+    <h6 class="text-muted">CGPA</h6>
+    <h3 class="fw-bold">{{ student.cgpa }}</h3>
+</div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card border-0 bg-primary-subtle">
+            <div class="card-body">
+                <h6 class="text-muted">Coding</h6>
+                <h3 class="fw-bold">{{ student.coding }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card border-0 bg-warning-subtle">
+            <div class="card-body">
+                <h6 class="text-muted">Aptitude</h6>
+                <h3 class="fw-bold">{{ student.aptitude }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card border-0 bg-info-subtle">
+            <div class="card-body">
+                <h6 class="text-muted">Projects</h6>
+                <h3 class="fw-bold">{{ student.projects }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- Profile Completion -->
+
+<div class="px-4 pb-3">
+
+    <div class="d-flex justify-content-between">
+
+        <h6 class="fw-semibold">
+            Profile Completion
+        </h6>
+
+        <span class="fw-bold">
+            85%
+        </span>
+
+    </div>
+
+    <div class="progress mt-2" style="height:12px;">
+
+        <div class="progress-bar bg-success"
+             style="width:85%;">
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Placement Readiness Card -->
+
+<div class="px-4 pb-4">
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body text-center">
+
+            <h6 class="text-muted">
+                Placement Readiness Score
+            </h6>
+
+            <h1 class="display-4 fw-bold text-primary">
+                82%
+            </h1>
+
+            <p class="text-muted mb-0">
+                Strong technical profile.
+                Improve communication skills
+                to increase placement opportunities.
+            </p>
+
+        </div>
+
+    </div>
+<!-- YOUR FORM STARTS BELOW -->
+ <hr class="mx-4">
+
+<div class="px-4">
+    <h4 class="mb-4">
+        Edit Profile Information
+    </h4>
+</div>
                 <div class="card-body p-4">
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+                 <form method="POST">
 
-                    <form method="POST">
+    {% csrf_token %}
 
-                        {% csrf_token %}
+    <div class="row">
 
-                        {{ form.as_p }}
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+                Branch
+            </label>
+            {{ form.branch }}
+        </div>
 
-                        <button
-                            type="submit"
-                            class="btn btn-success w-100 mt-3">
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+                Semester
+            </label>
+            {{ form.semester }}
+        </div>
 
-                            Save Profile
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+                CGPA
+            </label>
+            {{ form.cgpa }}
+        </div>
 
-                        </button>
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+                Aptitude
+            </label>
+            {{ form.aptitude }}
+        </div>
 
-                    </form>
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+                Coding
+            </label>
+            {{ form.coding }}
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+                Communication
+            </label>
+            {{ form.communication }}
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+                Projects
+            </label>
+            {{ form.projects }}
+        </div>
+
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-success save-btn w-100 mt-3">
+
+        Save Profile
+
+    </button>
+
+</form>
 
                 </div>
 
