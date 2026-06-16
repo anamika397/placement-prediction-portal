@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -10,7 +12,7 @@ from .models import PredictionHistory
 import csv
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
-
+from django.contrib import messages
 
 
 def home(request):
@@ -18,23 +20,59 @@ def home(request):
     return render(request, 'home.html')
 
 
-def register(request):
+from django.contrib.auth.models import User
 
+def register(request):
     if request.method == 'POST':
 
         form = StudentRegistrationForm(request.POST)
 
         if form.is_valid():
 
-            form.save()
+           print("FORM VALID")
 
-            return redirect('/')
+           student = form.save(commit=False)
+
+           username = student.email
+
+           if User.objects.filter(username=username).exists():
+
+               form.add_error(
+                 'email',
+                 'An account with this email already exists.'
+               )
+
+           else:
+
+                user = User.objects.create_user(
+                    username=username,
+                    email=student.email,
+                    password=student.password
+                )
+
+                student.user = user
+
+                student.save()
+
+                return redirect('/login/')
+
+        else:
+
+         print("FORM INVALID")
+         print(form.errors)
 
     else:
 
-        form = StudentRegistrationForm()
+       form = StudentRegistrationForm()
 
-    return render(request, 'register.html', {'form': form})
+    return render(
+    request,
+    'register.html',
+    {'form': form}
+)
+
+
+
 def login_view(request):
 
     if request.method == 'POST':
@@ -53,6 +91,12 @@ def login_view(request):
             login(request, user)
 
             return redirect('/dashboard/')
+        else:
+
+            messages.error(
+                request,
+                "Invalid username or password"
+            )
 
     return render(request, 'login.html')
 
@@ -218,8 +262,11 @@ def profile(request):
             profile.user = request.user
 
             profile.save()
-
-            return redirect('/dashboard/')
+        messages.success(
+           request,
+           "Profile updated successfully!"
+)
+        return redirect('/dashboard/')
 
     else:
 
@@ -231,7 +278,8 @@ def profile(request):
         request,
         'profile.html',
         {
-            'form': form
+            'form': form,
+            'student': student
         }
     )
 
