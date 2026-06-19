@@ -29,8 +29,6 @@ def register(request):
 
         if form.is_valid():
 
-           print("FORM VALID")
-
            student = form.save(commit=False)
 
            username = student.email
@@ -57,8 +55,6 @@ def register(request):
                 return redirect('/login/')
 
         else:
-
-         print("FORM INVALID")
          print(form.errors)
 
     else:
@@ -84,7 +80,7 @@ def login_view(request):
             request,
             username=username,
             password=password
-        )
+      )
 
         if user is not None:
 
