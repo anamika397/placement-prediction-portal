@@ -1,8 +1,20 @@
 from django import forms
 from .models import Student
+
 from django import forms
+from .models import Student
+
 
 class StudentRegistrationForm(forms.ModelForm):
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Create password'
+            }
+        )
+    )
 
     class Meta:
         model = Student
@@ -10,7 +22,6 @@ class StudentRegistrationForm(forms.ModelForm):
         fields = [
             'name',
             'email',
-            'password',
             'branch',
             'semester',
             'cgpa',
@@ -19,32 +30,47 @@ class StudentRegistrationForm(forms.ModelForm):
             'communication',
             'projects'
         ]
-widgets = { 
-    'name': forms.TextInput(attrs={ 
-        'class': 'form-control', 
-        'placeholder': 'Enter full name' }),
-          'email': forms.EmailInput(attrs={ 
-              'class': 'form-control', 
-              'placeholder': 'Enter email' }), 
-              'password': forms.PasswordInput(attrs={ 
-                  'class': 'form-control',
-                    'placeholder': 'Create password' }),
-                      'branch': forms.TextInput(attrs={
-                           'class': 'form-control',
-                             'placeholder': 'Branch' }), 
-                             'semester': forms.NumberInput(attrs={ 
-                                 'class': 'form-control' }), 
-                                 'cgpa': forms.NumberInput(attrs={ 
-                                     'class': 'form-control' }), 
-                                     'aptitude': forms.NumberInput(attrs={
-                                          'class': 'form-control' }),
-                                            'coding': forms.NumberInput(attrs={ 
-                                                'class': 'form-control' }),
-                                                  'communication': forms.NumberInput(attrs={ 
-                                                      'class': 'form-control' }), 
-                                                      'projects': forms.NumberInput(attrs={
-                                                           'class': 'form-control' }), 
-                                                           }
+
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter full name'
+            }),
+
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter email'
+            }),
+
+            'branch': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Branch'
+            }),
+
+            'semester': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'cgpa': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'aptitude': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'coding': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'communication': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'projects': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+        }
 
 class StudentProfileForm(forms.ModelForm):
 
