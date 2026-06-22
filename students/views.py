@@ -23,29 +23,30 @@ def home(request):
 from django.contrib.auth.models import User
 
 def register(request):
+
     if request.method == 'POST':
 
         form = StudentRegistrationForm(request.POST)
 
         if form.is_valid():
 
-           student = form.save(commit=False)
+            student = form.save(commit=False)
+            password = form.cleaned_data['password']
+            username = student.email
 
-           username = student.email
+            if User.objects.filter(username=username).exists():
 
-           if User.objects.filter(username=username).exists():
+                form.add_error(
+                    'email',
+                    'Account already exists.'
+                )
 
-               form.add_error(
-                 'email',
-                 'An account with this email already exists.'
-               )
-
-           else:
+            else:
 
                 user = User.objects.create_user(
                     username=username,
                     email=student.email,
-                    password=student.password
+                    password=password
                 )
 
                 student.user = user
@@ -54,21 +55,15 @@ def register(request):
 
                 return redirect('/login/')
 
-        else:
-         print(form.errors)
-
     else:
 
-       form = StudentRegistrationForm()
+        form = StudentRegistrationForm()
 
     return render(
-    request,
-    'register.html',
-    {'form': form}
-)
-
-
-
+        request,
+        'register.html',
+        {'form': form}
+    )
 def login_view(request):
 
     if request.method == 'POST':
@@ -101,14 +96,16 @@ def dashboard(request):
     student = Student.objects.filter(
         user=request.user
     ).first()
+    history = PredictionHistory.objects.filter(
+        student=student
+    )
+    total_predictions = history.count()
 
-    total_predictions = PredictionHistory.objects.count()
-
-    total_placed = PredictionHistory.objects.filter(
+    total_placed = history.filter(
         prediction="Placed"
     ).count()
 
-    total_not_placed = PredictionHistory.objects.filter(
+    total_not_placed = history.filter(
         prediction="Not Placed"
     ).count()
 
@@ -214,7 +211,7 @@ def dashboard(request):
     'total_placed': total_placed,
 
     'total_not_placed': total_not_placed,
-
+    'prediction_history': history,
     'placement_rate': round(
         placement_rate,
         2
@@ -277,7 +274,7 @@ def profile(request):
             'form': form,
             'student': student
         }
-    )
+    )   
 
 def predict(request):
 
@@ -425,13 +422,21 @@ def delete_history(request, id):
     return redirect('/history/')
 def analytics(request):
 
-    total_predictions = PredictionHistory.objects.count()
+    student = Student.objects.filter(
+        user=request.user
+    ).first()
 
-    total_placed = PredictionHistory.objects.filter(
+    user_history = PredictionHistory.objects.filter(
+        student=student
+    )
+
+    total_predictions = user_history.count()
+
+    total_placed = user_history.filter(
         prediction="Placed"
     ).count()
 
-    total_not_placed = PredictionHistory.objects.filter(
+    total_not_placed = user_history.filter(
         prediction="Not Placed"
     ).count()
     student = Student.objects.filter(
@@ -456,9 +461,9 @@ def analytics(request):
         scores,
         key=scores.get
     )
-    recent_predictions = PredictionHistory.objects.order_by(
-        '-created_at'
-    )[:5]
+    recent_predictions = user_history.order_by(
+    '-created_at'
+)[:5]
     placed_data = total_placed
 
     not_placed_data = total_not_placed
