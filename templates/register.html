@@ -11,7 +11,9 @@
     border-radius:12px;
     padding:12px;
 }
-
+body{
+    background:#f5f7fb;
+}
 .form-control:focus{
     border-color:#4f46e5;
     box-shadow:0 0 0 0.2rem rgba(79,70,229,0.15);
@@ -22,13 +24,13 @@
 
 <body style="background:#f5f7fb;">
 
-<div class="container">
+<div class="container py-5">
 
     <div class="row justify-content-center">
 
-       <div class="col-md-9 col-lg-8">
-            <div class="card shadow-lg border-0 mt-5 rounded-4">
+        <div class="col-12 col-md-8 col-lg-6">
 
+            <div class="card shadow p-4 rounded-4">
                 <div class="card-body p-5">
 
                     <div class="text-center mb-4">
@@ -47,91 +49,37 @@
 
                     </div>
 <hr>
-
-<h5 class="mb-4 text-primary">
-    Academic & Skill Information
-</h5>
                     <form method="POST">
 
                         {% csrf_token %}
 
                        <div class="row">
 
-    <div class="col-md-6 mb-3">
+    <div class="col-md-12 mb-3">
         <label class="form-label fw-semibold">
             Full Name
         </label>
         {{ form.name }}
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-md-12 mb-3">
         <label class="form-label fw-semibold">
             Email
         </label>
         {{ form.email }}
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-md-12 mb-3">
         <label class="form-label fw-semibold">
             Password
         </label>
         {{ form.password }}
     </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">
-            Branch
-        </label>
-        {{ form.branch }}
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">
-            Semester
-        </label>
-        {{ form.semester }}
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">
-            CGPA
-        </label>
-        {{ form.cgpa }}
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">
-            Aptitude
-        </label>
-        {{ form.aptitude }}
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">
-            Coding
-        </label>
-        {{ form.coding }}
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">
-            Communication
-        </label>
-        {{ form.communication }}
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">
-            Projects
-        </label>
-        {{ form.projects }}
-    </div>
-
 </div>
 
                         <button
                             type="submit"
-                            class="btn btn-success w-100 py-3 mt-4 fw-bold">
+                           class="btn btn-success w-100 py-3">
                             Register
 
 </button>
