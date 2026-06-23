@@ -50,7 +50,7 @@ def register(request):
                 )
 
                 student.user = user
-
+                student.password = password
                 student.save()
 
                 return redirect('/login/')
@@ -75,12 +75,18 @@ def login_view(request):
             request,
             username=username,
             password=password
-      )
+        )
 
         if user is not None:
 
             login(request, user)
+            student = Student.objects.filter(
+                user=user
+            ).first()
 
+            if student and student.cgpa == 0:
+                return redirect('/profile/') 
+            
             return redirect('/dashboard/')
         else:
 
@@ -240,7 +246,6 @@ def profile(request):
     student = Student.objects.filter(
         user=request.user
     ).first()
-    print("Current student:", student)
     if request.method == 'POST':
 
         form = StudentProfileForm(
@@ -255,11 +260,11 @@ def profile(request):
             profile.user = request.user
 
             profile.save()
-        messages.success(
-           request,
-           "Profile updated successfully!"
+            messages.success(
+                request,
+                "Profile updated successfully!"
 )
-        return redirect('/dashboard/')
+        return redirect('/predict/')
 
     else:
 

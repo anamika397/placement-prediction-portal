@@ -20,16 +20,9 @@ class StudentRegistrationForm(forms.ModelForm):
         model = Student
 
         fields = [
-            'name',
-            'email',
-            'branch',
-            'semester',
-            'cgpa',
-            'aptitude',
-            'coding',
-            'communication',
-            'projects'
-        ]
+    'name',
+    'email',
+]
 
         widgets = {
             'name': forms.TextInput(attrs={
@@ -40,35 +33,6 @@ class StudentRegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter email'
-            }),
-
-            'branch': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Branch'
-            }),
-
-            'semester': forms.NumberInput(attrs={
-                'class': 'form-control'
-            }),
-
-            'cgpa': forms.NumberInput(attrs={
-                'class': 'form-control'
-            }),
-
-            'aptitude': forms.NumberInput(attrs={
-                'class': 'form-control'
-            }),
-
-            'coding': forms.NumberInput(attrs={
-                'class': 'form-control'
-            }),
-
-            'communication': forms.NumberInput(attrs={
-                'class': 'form-control'
-            }),
-
-            'projects': forms.NumberInput(attrs={
-                'class': 'form-control'
             }),
         }
 

@@ -17,7 +17,7 @@ class Student(models.Model):
 
     branch = models.CharField(max_length=50, blank=True)
 
-    semester = models.IntegerField(default=1)
+    semester = models.IntegerField(default=0)
 
     cgpa = models.FloatField(default=0)
 
