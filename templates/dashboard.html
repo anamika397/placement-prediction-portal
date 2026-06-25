@@ -72,15 +72,9 @@ Placement Portal
 <a href="/dashboard/" class="btn btn-outline-light">
 Dashboard
 </a>
-
-<a href="/predict/" class="btn btn-outline-light">
-Predict
+<a href="/profile/" class="btn btn-outline-light">
+Profile
 </a>
-
-<a href="/history/" class="btn btn-outline-light">
-History
-</a>
-
 <a href="/logout/" class="btn btn-danger">
 Logout
 </a>
@@ -106,46 +100,41 @@ Logout
 
     </p>
     </div>
-<div class="custom-card p-4 mb-4">
+    <div class="custom-card p-4 mb-4">
 
-    <h3 class="mb-4 fw-bold">
-        <i class="bi bi-person-circle"></i>
+    <h4 class="mb-4">
         Student Profile
-    </h3>
+    </h4>
 
     <div class="row">
 
         <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm p-3 h-100">
-                <small class="text-muted">Name</small>
-                <h5 class="mt-2">
-                    {% if student.name %}
-                        {{ student.name }}
-                    {% else %}
-                        {{ request.user.username }}
-                    {% endif %}
+            <div class="card border-0 shadow-sm p-3">
+                <small class="text-muted">Branch</small>
+                <h5>{{ student.branch }}</h5>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm p-3">
+                <small class="text-muted">Semester</small>
+                <h5>{{ student.semester }}</h5>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm p-3">
+                <small class="text-muted">CGPA</small>
+                <h5 class="text-success">
+                    {{ student.cgpa }}
                 </h5>
             </div>
         </div>
 
         <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm p-3 h-100">
-                <small class="text-muted">Branch</small>
-                <h5 class="mt-2">{{ student.branch }}</h5>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm p-3 h-100">
-                <small class="text-muted">Semester</small>
-                <h5 class="mt-2">{{ student.semester }}</h5>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm p-3 h-100">
-                <small class="text-muted">CGPA</small>
-                <h5 class="mt-2 text-success">{{ student.cgpa }}</h5>
+            <div class="card border-0 shadow-sm p-3">
+                <small class="text-muted">Projects</small>
+                <h5>{{ student.projects }}</h5>
             </div>
         </div>
 
@@ -173,57 +162,7 @@ Logout
     </div>
 
 </div>
-
-{% if placement_probability %}
-
-<div class="card shadow p-4 mt-4 border-primary">
-
-    <h4 class="text-primary">
-        Placement Probability
-    </h4>
-
-    <h2>
-        {{ placement_probability }}%
-    </h2>
-
-    <div class="progress" style="height:30px;">
-
-        <div class="progress-bar bg-primary"
-             role="progressbar"
-             style="width: {{ placement_probability }}%;">
-
-            {{ placement_probability }}%
-
-        </div>
-
     </div>
-
-</div>
-
-{% endif %}
-    </div>
-    <div class="card p-4 mt-3 mb-4 shadow custom-card">
-    <h3 class="text-primary">
-        Placement Roadmap
-    </h3>
-
-    <ul>
-
-        {% for item in roadmap %}
-
-        <li>{{ item }}</li>
-
-        {% empty %}
-
-        <li>
-            Excellent profile! Keep improving consistently.
-        </li>
-
-        {% endfor %}
-
-    </ul>
-
-</div>
 <div class="row mt-4">
 
     <div class="col-md-6">
@@ -271,92 +210,62 @@ Logout
     </div>
 
 </div>
-    <div class="mt-3">
-
-        {% if readiness_score >= 80 %}
-
-        <div class="alert alert-success mb-0">
-
-            Excellent placement readiness. Keep improving projects and interview skills.
-
-        </div>
-
-        {% elif readiness_score >= 60 %}
-
-        <div class="alert alert-warning mb-0">
-
-            Good progress. Focus on coding, aptitude and communication to increase placement chances.
-
-        </div>
-
-        {% else %}
-
-        <div class="alert alert-danger mb-0">
-
-            Improvement needed. Work on coding, aptitude, communication and projects.
-
-        </div>
-
-        {% endif %}
-
-    </div>
 
 </div>
 
-    <div class="custom-card p-4 mt-4">
+   <div class="custom-card p-4 mt-4">
 
     <h3 class="mb-4">
         <i class="bi bi-lightning-charge-fill"></i>
-        Quick Actions
+        Portal Features
     </h3>
 
-    <a href="/profile/"
-       class="btn btn-primary action-btn">
-       <i class="bi bi-person"></i>
-       Profile
-    </a>
+    <div class="row">
 
-    <a href="/predict/"
-       class="btn btn-success action-btn">
-       <i class="bi bi-graph-up"></i>
-       Predict
-    </a>
+        <div class="col-md-3 mb-3">
+            <a href="/predict/" class="btn btn-success w-100 p-3">
+                <i class="bi bi-graph-up fs-4"></i><br>
+                Predict
+            </a>
+        </div>
 
-    <a href="/company-eligibility/"
-       class="btn btn-secondary action-btn">
-       <i class="bi bi-building"></i>
-       Companies
-    </a>
+        <div class="col-md-3 mb-3">
+            <a href="/company-eligibility/" class="btn btn-secondary w-100 p-3">
+                <i class="bi bi-building fs-4"></i><br>
+                Companies
+            </a>
+        </div>
 
-    <a href="/career-guidance/"
-       class="btn btn-warning action-btn">
-       <i class="bi bi-bullseye"></i>
-       Guidance
-    </a>
+        <div class="col-md-3 mb-3">
+            <a href="/career-guidance/" class="btn btn-warning w-100 p-3">
+                <i class="bi bi-bullseye fs-4"></i><br>
+                Guidance
+            </a>
+        </div>
 
-    <a href="/analytics/"
-       class="btn btn-info action-btn">
-       <i class="bi bi-bar-chart"></i>
-       Analytics
-    </a>
+        <div class="col-md-3 mb-3">
+            <a href="/analytics/" class="btn btn-info w-100 p-3">
+                <i class="bi bi-bar-chart fs-4"></i><br>
+                Analytics
+            </a>
+        </div>
 
-    <a href="/history/"
-       class="btn btn-secondary action-btn">
-       <i class="bi bi-clock-history"></i>
-       History
-    </a>
+        <div class="col-md-3 mb-3">
+            <a href="/history/" class="btn btn-dark w-100 p-3">
+                <i class="bi bi-clock-history fs-4"></i><br>
+                History
+            </a>
+        </div>
 
-    <a href="/download-report/"
-       class="btn btn-dark action-btn">
-       <i class="bi bi-file-earmark-pdf"></i>
-       PDF Report
-    </a>
+        <div class="col-md-3 mb-3">
+            <a href="/download-report/" class="btn btn-secondary w-100 p-3">
+                <i class="bi bi-file-earmark-pdf fs-4"></i><br>
+                PDF Report
+            </a>
+        </div>
 
-    <a href="/logout/"
-       class="btn btn-danger action-btn">
-       <i class="bi bi-box-arrow-right"></i>
-       Logout
-    </a>
+    </div>
+
 </div>
 </div>
 </body>
