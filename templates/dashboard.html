@@ -59,29 +59,69 @@ body{
 </head>
 
 <body>
-<nav class="navbar navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
 
-<div class="container-fluid">
+    <div class="container">
 
-<a class="navbar-brand" href="/dashboard/">
-Placement Portal
-</a>
+        <a class="navbar-brand fw-bold"
+           href="/dashboard/">
+            Placement Portal
+        </a>
 
-<div>
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
 
-<a href="/dashboard/" class="btn btn-outline-light">
-Dashboard
-</a>
-<a href="/profile/" class="btn btn-outline-light">
-Profile
-</a>
-<a href="/logout/" class="btn btn-danger">
-Logout
-</a>
+            <span class="navbar-toggler-icon"></span>
 
-</div>
+        </button>
 
-</div>
+        <div class="collapse navbar-collapse"
+             id="navbarNav">
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="/dashboard/">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="/predict/">
+                        Predict
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="/history/">
+                        History
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="/analytics/">
+                        Analytics
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-danger"
+                       href="/logout/">
+                        Logout
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
 
 </nav>
 <div class="container mt-5">
@@ -268,5 +308,6 @@ Logout
 
 </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
