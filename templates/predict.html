@@ -353,104 +353,19 @@ body{
 
         {% endif %}
 
-        <hr>
+<div class="text-center mt-4">
 
-        <div class="alert alert-info">
+    <a href="/history/"
+       class="btn btn-outline-secondary me-2">
+        View History
+    </a>
 
-            <h5>
-                Portal Statistics
-            </h5>
+    <a href="/dashboard/"
+       class="btn btn-primary">
+        Go to Dashboard
+    </a>
 
-            <p>
-                Total Predictions Made:
-                {{ history|length }}
-            </p>
-
-        </div>
-
-        <h2>
-            Prediction History
-        </h2>
-
-        <h5>
-            Total Predictions:
-            {{ history|length }}
-        </h5>
-
-        <table class="table table-bordered table-striped">
-
-            <thead class="table-dark">
-
-                <tr>
-
-                    <th>Student</th>
-                    <th>CGPA</th>
-                    <th>Aptitude</th>
-                    <th>Coding</th>
-                    <th>Communication</th>
-                    <th>Projects</th>
-                    <th>Prediction</th>
-                    <th>Date</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                {% for item in history %}
-
-                <tr>
-
-                    <td>{{ item.student.name }}</td>
-                    <td>{{ item.cgpa }}</td>
-                    <td>{{ item.aptitude }}</td>
-                    <td>{{ item.coding }}</td>
-                    <td>{{ item.communication }}</td>
-                    <td>{{ item.projects }}</td>
-
-                    <td>
-
-                        {% if item.prediction == "Placed" %}
-
-                        <span class="badge bg-success">
-                            Placed
-                        </span>
-
-                        {% else %}
-
-                        <span class="badge bg-danger">
-                            Not Placed
-                        </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td>{{ item.created_at }}</td>
-
-                </tr>
-
-                {% empty %}
-
-                <tr>
-
-                    <td colspan="8" class="text-center">
-
-                        No Prediction History Found
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-            </tbody>
-
-        </table>
-<a href="/dashboard/"
-   class="btn btn-primary mt-3">
-    Go to Dashboard
-</a>
+</div>
     </div>
 
 </div>

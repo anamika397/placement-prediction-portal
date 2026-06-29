@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .forms import StudentRegistrationForm, StudentProfileForm
-from .models import Student
+from .models import Prediction, Student
 from ml.predict import predict_placement
 from .forms import PredictionForm
 from .ml_utils import predict_placement
@@ -314,7 +314,10 @@ def predict(request):
             100,
             readiness_score
         )
-
+        Prediction.objects.create(
+            student=student,
+            probability=placement_probability
+      )
         result = predict_placement(
             cgpa,
             aptitude,

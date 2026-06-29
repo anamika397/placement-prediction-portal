@@ -55,3 +55,19 @@ class PredictionHistory(models.Model):
     def __str__(self):
 
         return f"{self.student.name} - {self.prediction}"
+
+
+class Prediction(models.Model):
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE
+    )
+
+    probability = models.FloatField()
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return f"{self.student.user.username} - {self.probability}%"
