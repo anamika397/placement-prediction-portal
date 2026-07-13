@@ -606,22 +606,19 @@ def company_eligibility(request):
         else:
             not_eligible.append("Microsoft")
 
-        # Recommended Companies
+       # Recommended Companies
 
-        if student.coding >= 90:
-            recommended.append("Google")
+        if student.cgpa >= 8.5 and student.coding >= 85 and student.aptitude >= 80:
+            recommended.extend(["Google", "Microsoft", "Amazon"])
 
-        if student.coding >= 85:
-            recommended.append("Amazon")
+        elif student.cgpa >= 7.5 and student.coding >= 75:
+            recommended.extend(["Microsoft", "Accenture", "Cognizant"])
 
-        if student.coding >= 75:
-            recommended.append("Microsoft")
+        elif student.cgpa >= 6.5 and student.coding >= 60:
+            recommended.extend(["Infosys", "TCS", "Wipro"])
 
-        if student.coding >= 70:
-            recommended.append("Accenture")
-
-        if student.coding >= 60:
-            recommended.append("TCS")
+        else:
+            recommended.extend(["TCS", "Capgemini", "Tech Mahindra"])
 
     return render(
         request,
